@@ -1,0 +1,54 @@
+# ROS build files
+build/
+devel/
+install/
+
+# Logs and debugging files
+*.log
+*.bag
+rosout.log
+roscore.log
+*.log.*
+
+# Catkin workspace temporary files
+catkin_generated/
+.cmake/
+*.pyc
+*.pyo
+*.swp
+*.swo
+.catkin_workspace
+
+# Python cache
+__pycache__/
+
+# Launch file generated logs
+*.launch.*
+
+# IDE-specific files
+.vscode/
+.idea/
+*.code-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary or backup files
+*.bak
+*.tmp
+*.~*
+
+# Other generated files
+*.msg.cpp
+*.msg.h
+*.srv.cpp
+*.srv.h
+*.action.cpp
+*.action.h
+*_genmsg_py.py
+
+# Custom dependencies
+.libs/
+bin/
+lib/
