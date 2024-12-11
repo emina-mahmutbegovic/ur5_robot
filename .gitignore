@@ -52,3 +52,4 @@ Thumbs.db
 .libs/
 bin/
 lib/
+*.setup_assistant
