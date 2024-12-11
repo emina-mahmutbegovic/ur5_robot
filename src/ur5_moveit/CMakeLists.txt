@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ur5_gazebo)
+project(ur5_moveit)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,15 +8,12 @@ project(ur5_gazebo)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  controller_manager
-  joint_state_controller
-  robot_state_publisher
+  interactive_markers
+  moveit_core
+  moveit_ros_planning_interface
   roscpp
   rospy
   std_msgs
-  urdf
-  moveit_core
-  pilz_industrial_motion_planner
 )
 
 ## System dependencies are found with CMake's conventions
@@ -110,8 +107,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES ur5_gazebo
-#  CATKIN_DEPENDS controller_manager joint_state_controller robot_state_publisher roscpp rospy std_msgs urdf
+#  LIBRARIES ur5_ik
+#  CATKIN_DEPENDS interactive_markers moveit_core moveit_ros_planning_interface roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -126,9 +123,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(ur5_moveit_node src/main.cpp)
+add_dependencies(ur5_moveit_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_moveit_node ${catkin_LIBRARIES})
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/ur5_gazebo.cpp
+#   src/${PROJECT_NAME}/ur5_ik.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -139,7 +140,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/ur5_gazebo_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/ur5_ik_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -203,7 +204,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ur5_gazebo.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_ur5_ik.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
