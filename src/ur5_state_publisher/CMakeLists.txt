@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   sensor_msgs
   trajectory_msgs
+  kdl_parser
 )
 
 ## System dependencies are found with CMake's conventions
@@ -126,13 +127,19 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(ur5_point_publisher_node src/main_point.cpp src/joint_state_publisher.cpp include/joint_state_publisher.hpp)
+add_executable(ur5_point_publisher_node 
+  src/main_point.cpp 
+  src/joint_state_publisher.cpp 
+  include/joint_state_publisher.hpp
+  src/joint_motion_generator.cpp)
 add_dependencies(ur5_point_publisher_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ur5_point_publisher_node ${catkin_LIBRARIES})
+target_include_directories(ur5_point_publisher_node PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(ur5_trajectory_publisher_node src/main_trajectory.cpp src/joint_state_publisher.cpp include/joint_state_publisher.hpp)
 add_dependencies(ur5_trajectory_publisher_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ur5_trajectory_publisher_node ${catkin_LIBRARIES})
+target_include_directories(ur5_trajectory_publisher_node PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <string>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 #include <vector>
 
 namespace ur5::state_publisher {
@@ -33,6 +34,10 @@ public:
     }
 
 private:
+    void load_trajectory_point(trajectory_msgs::JointTrajectoryPoint *joint_trajectory_point, 
+                                const std::vector<double> &point, 
+                                const double &velocity,
+                                const double &acceleration);
 
     // Define constants
     const int kLoopRate = 50;
@@ -57,4 +62,4 @@ const std::string kWrist1Joint = "wrist_1_joint";
 const std::string kWrist2Joint = "wrist_2_joint";
 const std::string kWrist3Joint = "wrist_3_joint";
 
-}
+} // namespace ur5::state_publisher

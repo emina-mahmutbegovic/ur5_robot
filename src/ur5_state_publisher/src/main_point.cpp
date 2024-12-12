@@ -1,4 +1,4 @@
-#include "../include/joint_state_publisher.hpp"
+#include "joint_state_publisher.hpp"
 
 #include <ros/ros.h>
 
