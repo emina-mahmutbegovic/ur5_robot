@@ -1,56 +1,67 @@
-#include <string>
-#include <ros/ros.h>
+#include "../include/joint_state_publisher.hpp"
+
 #include <trajectory_msgs/JointTrajectory.h>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
 
+namespace ur5::state_publisher {
 
+    void JointStatePublisher::init() {
+        joint_trajectory_pub_ = node_handle_.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
+    }
 
-// Define joint names
-const std::string shoulder_pan_joint = "shoulder_pan_joint";
-const std::string shoulder_lift_joint = "shoulder_lift_joint";
-const std::string elbow_joint = "elbow_joint";
-const std::string wrist_1_joint = "wrist_1_joint";
-const std::string wrist_2_joint = "wrist_2_joint";
-const std::string wrist_3_joint = "wrist_3_joint";
-
-int main(int argc, char** argv) {
-    ros::init(argc, argv, "state_publisher");
-    ros::NodeHandle n;
-    ros::AsyncSpinner spinner(1);
-    spinner.start();
-
-    sleep(2.0);
-        
-    // Create publisher for joint trajectory
-    ros::Publisher joint_trajectory_pub = n.advertise<trajectory_msgs::JointTrajectory>("/ur5/eff_joint_traj_controller/command", 1000, true);
-	
-    //Create subscriber for joint trajectory
-	ros::Subscriber joint_trajectory_sub = n.subscribe("/ur5/eff_joint_traj_controller/state", 1000, get_shoulder_pan_joint_position);
-    
-    ros::Rate loop_rate(30);
-
-   while (ros::ok()) {
+    void JointStatePublisher::update(const std::vector<double> &positions, 
+                                    const std::vector<double> &velocities,
+                                    const std::vector<double> &accelerations) {
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
-        joint_trajectory.joint_names = {shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint};
+        joint_trajectory.joint_names = {kShoulderPanJoint, kShoulderLiftJoint, kElbowJoint, kWrist1Joint, kWrist2Joint, kWrist3Joint};
 
         trajectory_msgs::JointTrajectoryPoint point;
-        point.positions = {0, -1.57, 0, -1.57, 0, 0};
-        point.velocities = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-        point.time_from_start = ros::Duration(2.0);
+        point.positions = positions;
+        point.velocities = velocities;
+        point.accelerations = accelerations;
+        point.time_from_start = ros::Duration(1.0);
 
         joint_trajectory.points.push_back(point);
 
-        //send the joint state and transform
-        joint_trajectory_pub.publish(joint_trajectory);
-
-        // This will adjust as needed per iteration
-        ros::WallDuration(1.0).sleep();
+        // Send the joint state and transform
+        joint_trajectory_pub_.publish(joint_trajectory);
     }
 
-    ros::shutdown();
-    
-    return 0;
-}
+    void JointStatePublisher::move(const std::vector<double> &point1, 
+                                    const std::vector<double> &point2,
+                                    const double &velocity,
+                                    const double &accelleration) {
 
+        trajectory_msgs::JointTrajectory joint_trajectory;
+        joint_trajectory.header.stamp = ros::Time::now();
+        joint_trajectory.joint_names = {kShoulderPanJoint, kShoulderLiftJoint, kElbowJoint, kWrist1Joint, kWrist2Joint, kWrist3Joint};
+
+        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point1;
+        joint_trajectory_point1.positions = point1;
+
+        for(auto i = 0; i < point1.size(); ++i) {
+            joint_trajectory_point1.velocities[i] = velocity;
+            joint_trajectory_point1.accelerations[i] = accelleration;
+        }
+        joint_trajectory_point1.time_from_start = ros::Duration(1.0);
+
+        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point2;
+        joint_trajectory_point2.positions = point2;
+
+        for(auto i = 0; i < point2.size(); ++i) {
+            joint_trajectory_point2.velocities[i] = velocity;
+            joint_trajectory_point2.accelerations[i] = accelleration;
+        }
+
+        joint_trajectory_point2.time_from_start = ros::Duration(2.0);
+
+        joint_trajectory.points.resize(2);
+        joint_trajectory.points[0] = joint_trajectory_point1;
+        joint_trajectory.points[1] = joint_trajectory_point2;
+
+        // Send the joint state and transform
+        joint_trajectory_pub_.publish(joint_trajectory);
+    }
+}

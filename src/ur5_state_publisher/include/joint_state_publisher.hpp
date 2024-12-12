@@ -2,13 +2,11 @@
 #include <string>
 #include <vector>
 
-namespace ur5 {
+namespace ur5::state_publisher {
 
 class JointStatePublisher {
    public:
-        JointStatePublisher() {
-            spinner_.start();
-        };
+        JointStatePublisher() = default;
 
         JointStatePublisher(const JointStatePublisher &) = delete;
         JointStatePublisher(JointStatePublisher &&) = delete;
@@ -18,30 +16,37 @@ class JointStatePublisher {
 
         ~JointStatePublisher() = default;
 
+        void init();
+
         void update(const std::vector<double> &positions, 
                     const std::vector<double> &velocities,
                     const std::vector<double> &accelerations
         );
 
-    private:
+        void move(const std::vector<double> &point1, 
+                  const std::vector<double> &point2,
+                  const double &velocity,
+                  const double &accelleration);
 
-    void init() {
-        joint_trajectory_pub_ = n.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
-    }
+        const int kLoopRate_() const {
+		    return kLoopRate;
+        }
+
+    private:
 
     // Define constants
     const int kLoopRate = 50;
-    const std::string kServiceName = "ur5_state_publisher";
     const int kQueueSize = 10;
 
     ros::NodeHandle node_handle_;
-    ros::AsyncSpinner spinner_(1);
 
-    ros::Publisher joint_trajectory_pub _;
+    ros::Publisher joint_trajectory_pub_;
 
 };
 
  // TODO: Load constants below from config file
+const std::string kServiceName = "ur5_state_publisher";
+
 const std::string kControllerCommandTopic = "/ur5/eff_joint_traj_controller/command";
 const std::string kControllerStateTopic = "/ur5/eff_joint_traj_controller/state";
 

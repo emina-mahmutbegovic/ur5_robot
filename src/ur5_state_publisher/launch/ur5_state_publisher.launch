@@ -35,6 +35,6 @@
                 <remap from="/joint_states" to="/ur5/joint_states"/>
         </node>
 
-        <node name="ur5_state_publisher_node" pkg="ur5_state_publisher" type="ur5_state_publisher_node" />
+        <node name="ur5_trajectory_publisher_node" pkg="ur5_state_publisher" type="ur5_trajectory_publisher_node" />
 
 </launch>

@@ -126,13 +126,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(ur5_state_publisher_fixed_node src/main.cpp)
-add_dependencies(ur5_state_publisher_fixed_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_state_publisher_fixed_node ${catkin_LIBRARIES})
+add_executable(ur5_point_publisher_node src/main_point.cpp src/joint_state_publisher.cpp include/joint_state_publisher.hpp)
+add_dependencies(ur5_point_publisher_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_point_publisher_node ${catkin_LIBRARIES})
 
-add_executable(ur5_state_publisher_node src/joint_state_publisher.cpp)
-add_dependencies(ur5_state_publisher_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_state_publisher_node ${catkin_LIBRARIES})
+add_executable(ur5_trajectory_publisher_node src/main_trajectory.cpp src/joint_state_publisher.cpp include/joint_state_publisher.hpp)
+add_dependencies(ur5_trajectory_publisher_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_trajectory_publisher_node ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
