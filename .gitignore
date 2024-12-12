@@ -22,9 +22,6 @@ catkin_generated/
 # Python cache
 __pycache__/
 
-# Launch file generated logs
-*.launch.*
-
 # IDE-specific files
 .vscode/
 .idea/
