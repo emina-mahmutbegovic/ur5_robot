@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 
 namespace ur5 {
+   // JointMotionGenerator::JointMotionGenerator(const std::string &urdf_file_path) : urdf_file_path_(urdf_file_path) {};
     
     int JointMotionGenerator::init() {
         // Parse urdf model and generate KDL tree

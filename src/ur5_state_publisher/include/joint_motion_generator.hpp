@@ -11,7 +11,8 @@ namespace ur5 {
 class JointMotionGenerator {
 
 public:
-    JointMotionGenerator(const std::string &urdf_file_path) : urdf_file_path_(urdf_file_path) {};
+    JointMotionGenerator() = default;
+    JointMotionGenerator(const std::string &urdf_file_path);
 
     JointMotionGenerator(const JointMotionGenerator &) = delete;
     JointMotionGenerator(JointMotionGenerator &&) = delete;
