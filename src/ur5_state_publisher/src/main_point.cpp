@@ -22,10 +22,10 @@ int main(int argc, char** argv) {
 
    while (ros::ok()) {
         std::vector<double> positions = {0, -1.57, 0, -1.57, 0, 0};
-        std::vector<double> velocities = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        std::vector<double> accelerations = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        double velocity = 0;
+        double acceleration = 0;
 
-        joint_state_publisher.update(positions, velocities, accelerations);
+        joint_state_publisher.move_1p(positions, velocity, acceleration);
         
         // This will adjust as needed per iteration
         loop_rate.sleep();

@@ -5,34 +5,34 @@
 namespace ur5::state_publisher {
 
 class JointStatePublisher {
-   public:
-        JointStatePublisher() = default;
 
-        JointStatePublisher(const JointStatePublisher &) = delete;
-        JointStatePublisher(JointStatePublisher &&) = delete;
+public:
+    JointStatePublisher() = default;
 
-        JointStatePublisher &operator=(const JointStatePublisher &) = delete;
-        JointStatePublisher &operator=(JointStatePublisher &&) = delete;
+    JointStatePublisher(const JointStatePublisher &) = delete;
+    JointStatePublisher(JointStatePublisher &&) = delete;
 
-        ~JointStatePublisher() = default;
+    JointStatePublisher &operator=(const JointStatePublisher &) = delete;
+    JointStatePublisher &operator=(JointStatePublisher &&) = delete;
 
-        void init();
+    ~JointStatePublisher() = default;
 
-        void update(const std::vector<double> &positions, 
-                    const std::vector<double> &velocities,
-                    const std::vector<double> &accelerations
-        );
+    void init();
 
-        void move_2p(const std::vector<double> &point1, 
-                  const std::vector<double> &point2,
-                  const double &velocity,
-                  const double &acceleration);
+    void move_1p(const std::vector<double> &point, 
+                const double &velocity,
+                const double &acceleration);
 
-        const int kLoopRate_() const {
-		    return kLoopRate;
-        }
+    void move_2p(const std::vector<double> &point1, 
+                const std::vector<double> &point2,
+                const double &velocity,
+                const double &acceleration);
 
-    private:
+    const int kLoopRate_() const {
+        return kLoopRate;
+    }
+
+private:
 
     // Define constants
     const int kLoopRate = 50;

@@ -9,21 +9,28 @@ namespace ur5::state_publisher {
         joint_trajectory_pub_ = node_handle_.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
     }
 
-    void JointStatePublisher::update(const std::vector<double> &positions, 
-                                    const std::vector<double> &velocities,
-                                    const std::vector<double> &accelerations) {
+    void JointStatePublisher::move_1p(const std::vector<double> &point, 
+                                      const double &velocity,
+                                      const double &acceleration) {
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
         joint_trajectory.joint_names = {kShoulderPanJoint, kShoulderLiftJoint, kElbowJoint, kWrist1Joint, kWrist2Joint, kWrist3Joint};
 
-        trajectory_msgs::JointTrajectoryPoint point;
-        point.positions = positions;
-        point.velocities = velocities;
-        point.accelerations = accelerations;
-        point.time_from_start = ros::Duration(1.0);
+        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point;
+        joint_trajectory_point.positions = point;
+      
+        joint_trajectory_point.velocities.resize(6);
+        joint_trajectory_point.accelerations.resize(6);
 
-        joint_trajectory.points.push_back(point);
+        for(auto i = 0; i < point.size(); ++i) {
+            joint_trajectory_point.velocities[i] = velocity;
+            joint_trajectory_point.accelerations[i] = acceleration;
+        }
+
+        joint_trajectory_point.time_from_start = ros::Duration(1.0);
+
+        joint_trajectory.points.push_back(joint_trajectory_point);
 
         // Send the joint state and transform
         joint_trajectory_pub_.publish(joint_trajectory);
@@ -48,6 +55,7 @@ namespace ur5::state_publisher {
             joint_trajectory_point1.velocities[i] = velocity;
             joint_trajectory_point1.accelerations[i] = acceleration;
         }
+
         joint_trajectory_point1.time_from_start = ros::Duration(1.0);
 
         trajectory_msgs::JointTrajectoryPoint joint_trajectory_point2;
