@@ -16,7 +16,6 @@
         <arg name="debug" value="false"/>
         <arg name="gui" value="true"/>
         <arg name="paused" value="true" />
-        <!--<arg name="world_name" value="$(arg world_file)"/>-->
     </include>   
 
     <!-- Spawn the robot using the package gazebo_ros-->
@@ -24,7 +23,6 @@
     
 
     <!-- Load the controllers-->
-
     <rosparam command="load" file="$(find ur5_gazebo)/config/ur5_controllers.yaml"/>
 
 
@@ -40,7 +38,6 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  
             output="screen" respawn="false">
             <remap from="/joint_states" to="/ur5/joint_states"/>
-        
     </node>
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />

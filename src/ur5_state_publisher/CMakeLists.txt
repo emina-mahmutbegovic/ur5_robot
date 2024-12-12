@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ur5_moveit)
+project(ur5_state_publisher)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -14,6 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  tf
+  sensor_msgs
+  trajectory_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -123,9 +126,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(ur5_moveit_node src/main.cpp)
-add_dependencies(ur5_moveit_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_moveit_node ${catkin_LIBRARIES})
+add_executable(ur5_state_publisher_fixed_node src/main.cpp)
+add_dependencies(ur5_state_publisher_fixed_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_state_publisher_fixed_node ${catkin_LIBRARIES})
+
+add_executable(ur5_state_publisher_node src/joint_state_publisher.cpp)
+add_dependencies(ur5_state_publisher_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_state_publisher_node ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
