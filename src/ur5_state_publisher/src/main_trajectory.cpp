@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
         double velocity = 0;
         double acceleration = 0;
 
-        joint_state_publisher.move(point1, point2, velocity, acceleration);
+        joint_state_publisher.move_2p(point1, point2, velocity, acceleration);
         
         // This will adjust as needed per iteration
         sleep(2.5);

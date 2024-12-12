@@ -29,10 +29,10 @@ namespace ur5::state_publisher {
         joint_trajectory_pub_.publish(joint_trajectory);
     }
 
-    void JointStatePublisher::move(const std::vector<double> &point1, 
+    void JointStatePublisher::move_2p(const std::vector<double> &point1, 
                                     const std::vector<double> &point2,
                                     const double &velocity,
-                                    const double &accelleration) {
+                                    const double &acceleration) {
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
@@ -41,18 +41,24 @@ namespace ur5::state_publisher {
         trajectory_msgs::JointTrajectoryPoint joint_trajectory_point1;
         joint_trajectory_point1.positions = point1;
 
+        joint_trajectory_point1.velocities.resize(6);
+        joint_trajectory_point1.accelerations.resize(6);
+
         for(auto i = 0; i < point1.size(); ++i) {
             joint_trajectory_point1.velocities[i] = velocity;
-            joint_trajectory_point1.accelerations[i] = accelleration;
+            joint_trajectory_point1.accelerations[i] = acceleration;
         }
         joint_trajectory_point1.time_from_start = ros::Duration(1.0);
 
         trajectory_msgs::JointTrajectoryPoint joint_trajectory_point2;
         joint_trajectory_point2.positions = point2;
 
+        joint_trajectory_point2.velocities.resize(6);
+        joint_trajectory_point2.accelerations.resize(6);
+
         for(auto i = 0; i < point2.size(); ++i) {
             joint_trajectory_point2.velocities[i] = velocity;
-            joint_trajectory_point2.accelerations[i] = accelleration;
+            joint_trajectory_point2.accelerations[i] = acceleration;
         }
 
         joint_trajectory_point2.time_from_start = ros::Duration(2.0);

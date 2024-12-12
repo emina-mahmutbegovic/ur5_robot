@@ -23,10 +23,10 @@ class JointStatePublisher {
                     const std::vector<double> &accelerations
         );
 
-        void move(const std::vector<double> &point1, 
+        void move_2p(const std::vector<double> &point1, 
                   const std::vector<double> &point2,
                   const double &velocity,
-                  const double &accelleration);
+                  const double &acceleration);
 
         const int kLoopRate_() const {
 		    return kLoopRate;
