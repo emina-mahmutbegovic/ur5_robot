@@ -69,12 +69,23 @@ int main(int argc, char** argv) {
     ros::Rate loop_rate(joint_state_publisher.kLoopRate_());
 
     while (ros::ok()) {
-		KDL::JntArray output_joint_angles(6);
-
         // Get user input
-        std::cout << "Please define the offset you want to move for each axis, velocity, and acceleration in which the motion should be completed:\n";
+        std::cout << "Please define the first pose in which the motion should be completed:\n";
 
 		double x, y, z, v, a;
+		std::cout << " X: ";
+		std::cin >> x;
+		std::cout << " Y: ";
+		std::cin >> y;
+		std::cout << " Z: ";
+		std::cin >> z;
+
+        KDL::Vector desired_output_pose1(x, y, z);
+        KDL::JntArray output_joint_angles1(6);
+        joint_motion_generator.compute_joint_angles(desired_output_pose1, jnt_pos_start, output_joint_angles1);
+
+        std::cout << "Please define the second pose, velocity, and acceleration in which the motion should be completed:\n";
+
 		std::cout << " X: ";
 		std::cin >> x;
 		std::cout << " Y: ";
@@ -86,19 +97,25 @@ int main(int argc, char** argv) {
         std::cout << " Acceleration: ";
 		std::cin >> a;
 
-        KDL::Vector desired_output_pose(x, y, z);
+        KDL::Vector desired_output_pose2(x, y, z);
+        KDL::JntArray output_joint_angles2(6);
+        joint_motion_generator.compute_joint_angles(desired_output_pose2, jnt_pos_start, output_joint_angles2);
 
-        joint_motion_generator.compute_joint_angles(desired_output_pose, jnt_pos_start, output_joint_angles);
-
-        std::vector<double> positions(6);
-        for(auto i = 0; i < positions.size(); ++i) {
-            positions[i] = output_joint_angles(i);
+        // Populate output points
+        std::vector<double> point1(6);
+        for(auto i = 0; i < point1.size(); ++i) {
+            point1[i] = output_joint_angles1(i);
         }
 
-        joint_state_publisher.move_1p(positions, v, a);
+        std::vector<double> point2(6);
+        for(auto i = 0; i < point2.size(); ++i) {
+            point2[i] = output_joint_angles2(i);
+        }
+
+        joint_state_publisher.move_2p(point1, point2, v, a);
         
         // This will adjust as needed per iteration
-        sleep(2);
+        sleep(3);
     }
 
     ros::shutdown();

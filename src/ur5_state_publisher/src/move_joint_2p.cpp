@@ -42,21 +42,21 @@ int main(int argc, char** argv) {
 
         std::cout << "Please define the angles, velocity, and acceleration for the second point in which the motion should be completed:\n";
 
-		std::cout << " Shoulder Pan Joint:";
+		std::cout << " Shoulder Pan Joint: ";
 		std::cin >> sh_pan_jnt;
-		std::cout << " Shoulder Lift Joint:";
+		std::cout << " Shoulder Lift Joint: ";
 		std::cin >> sh_lift_jnt;
-		std::cout << " Elbow Joint:";
+		std::cout << " Elbow Joint: ";
 		std::cin >> ebw_jnt;
-        std::cout << " Wrist 1 Joint:";
+        std::cout << " Wrist 1 Joint: ";
 		std::cin >> wr_1_jnt;
-        std::cout << " Wrist 2 Joint:";
+        std::cout << " Wrist 2 Joint: ";
 		std::cin >> wr_2_jnt;
-        std::cout << " Wrist 3 Joint:";
+        std::cout << " Wrist 3 Joint: ";
 		std::cin >> wr_3_jnt;
-        std::cout << " Velocity:";
+        std::cout << " Velocity: ";
 		std::cin >> v;
-        std::cout << " Acceleration:";
+        std::cout << " Acceleration: ";
 		std::cin >> a;
 
         std::vector<double> point2 = {sh_pan_jnt, sh_lift_jnt, ebw_jnt, wr_1_jnt, wr_2_jnt, wr_3_jnt};

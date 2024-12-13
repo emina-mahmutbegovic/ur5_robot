@@ -128,17 +128,21 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(ur5_move_joint_1p src/move_joint_1p.cpp)
-add_dependencies(ur5_move_joint_1p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_joint_1p libs ${catkin_LIBRARIES})
+add_executable(ur5_move_joint_1p_node src/move_joint_1p.cpp)
+add_dependencies(ur5_move_joint_1p_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_move_joint_1p_node libs ${catkin_LIBRARIES})
 
-add_executable(ur5_move_joint_2p src/move_joint_2p.cpp)
-add_dependencies(ur5_move_joint_2p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_joint_2p libs ${catkin_LIBRARIES})
+add_executable(ur5_move_joint_2p_node src/move_joint_2p.cpp)
+add_dependencies(ur5_move_joint_2p_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_move_joint_2p_node libs ${catkin_LIBRARIES})
 
-add_executable(ur5_move_linear_1p src/move_linear_1p.cpp)
-add_dependencies(ur5_move_linear_1p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_linear_1p libs ${catkin_LIBRARIES})
+add_executable(ur5_move_linear_1p_node src/move_linear_1p.cpp)
+add_dependencies(ur5_move_linear_1p_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_move_linear_1p_node libs ${catkin_LIBRARIES})
+
+add_executable(ur5_move_linear_2p_node src/move_linear_2p.cpp)
+add_dependencies(ur5_move_linear_2p_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_move_linear_2p_node libs ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
