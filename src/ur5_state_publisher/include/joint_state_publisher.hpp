@@ -1,3 +1,10 @@
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
+#ifndef JOINT_STATE_PUBLISHER_HPP
+#define JOINT_STATE_PUBLISHER_HPP
+
 #include <ros/ros.h>
 #include <string>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
@@ -18,7 +25,7 @@ public:
 
     ~JointStatePublisher() = default;
 
-    void init();
+    void init(ros::NodeHandle &node_handle);
 
     void move_1p(const std::vector<double> &point, 
                 const double &velocity,
@@ -43,14 +50,12 @@ private:
     const int kLoopRate = 50;
     const int kQueueSize = 10;
 
-    ros::NodeHandle node_handle_;
-
     ros::Publisher joint_trajectory_pub_;
 
 };
 
  // TODO: Load constants below from config file
-const std::string kServiceName = "ur5_state_publisher";
+const std::string kServiceName = "joint_state_publisher";
 
 const std::string kControllerCommandTopic = "/ur5/eff_joint_traj_controller/command";
 const std::string kControllerStateTopic = "/ur5/eff_joint_traj_controller/state";
@@ -63,3 +68,5 @@ const std::string kWrist2Joint = "wrist_2_joint";
 const std::string kWrist3Joint = "wrist_3_joint";
 
 } // namespace ur5::state_publisher
+
+#endif // JOINT_STATE_PUBLISHER_HPP

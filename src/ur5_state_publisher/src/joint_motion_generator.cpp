@@ -1,26 +1,35 @@
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
 #include "joint_motion_generator.hpp"
 
-#include <cstdlib>
 #include <ros/ros.h>
 
-namespace ur5 {
-   // JointMotionGenerator::JointMotionGenerator(const std::string &urdf_file_path) : urdf_file_path_(urdf_file_path) {};
+namespace ur5::ik_solver {
     
-    int JointMotionGenerator::init() {
-        // Parse urdf model and generate KDL tree
-        if (!kdl_parser::treeFromFile(urdf_file_path_, ur5_tree_)){
-            ROS_ERROR("Failed to construct kdl tree");
-            return EXIT_FAILURE;
-        }
+    void JointMotionGenerator::compute_joint_angles(KDL::Vector &pose, 
+                                                    KDL::JntArray &input_joint_angles, 
+                                                    KDL::JntArray &output_joint_angles) {
+        // Compute current tcp position
+		KDL::Frame input_tcp_pose;
+		fk_solver_.JntToCart(input_joint_angles, input_tcp_pose);
 
-        // Generate a kinematic chain from the robot base to its tcp
-        ur5_tree_.getChain(kBaseLink, kWrist3Link, ur5_chain_);
+		ROS_INFO("Current TCP Position/Twist KDL:");		
+		print_tcp_pose(input_tcp_pose);
 
-        // fk_solver_ = new KDL::ChainFkSolverPos_recursive(ur5_chain_);
-	    // vel_ik_solver_ = new KDL::ChainIkSolverVel_pinv(ur5_chain_, 0.0001, 1000);
-	    // ik_solver_ = new KDL::ChainIkSolverPos_NR(ur5_chain_, fk_solver_, vel_ik_solver_, 1000);
+		KDL::Frame output_tcp_pose(pose);
 
-        return EXIT_SUCCESS;
+        ROS_INFO("Output TCP Position/Twist KDL:");		
+		print_tcp_pose(output_tcp_pose);
+
+		// Compute inverse kinematics
+		ik_solver_.CartToJnt(input_joint_angles, output_tcp_pose, output_joint_angles);
     }
 
-} // namespace ur5
+    void print_tcp_pose(const KDL::Frame &tcp_pose) {
+        ROS_INFO("Position: %f %f %f", tcp_pose.p(0), tcp_pose.p(1), tcp_pose.p(2));		
+		ROS_INFO("Orientation: %f %f %f", tcp_pose.M(0,0), tcp_pose.M(1,0), tcp_pose.M(2,0));
+    }
+
+} // namespace ur5::ik_solver

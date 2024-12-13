@@ -1,3 +1,7 @@
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
 #include "joint_state_publisher.hpp"
 
 #include <trajectory_msgs/JointTrajectory.h>
@@ -5,8 +9,8 @@
 
 namespace ur5::state_publisher {
 
-    void JointStatePublisher::init() {
-        joint_trajectory_pub_ = node_handle_.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
+    void JointStatePublisher::init(ros::NodeHandle &node_handle) {
+        joint_trajectory_pub_ = node_handle.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
     }
 
     void JointStatePublisher::load_trajectory_point(trajectory_msgs::JointTrajectoryPoint *joint_trajectory_point, 
@@ -27,6 +31,11 @@ namespace ur5::state_publisher {
     void JointStatePublisher::move_1p(const std::vector<double> &point, 
                                       const double &velocity,
                                       const double &acceleration) {
+        
+		ROS_INFO("Joint motion initiated:");		
+		ROS_INFO("Point: %f %f %f %f %f %f", point[0], point[1], point[2], point[3], point[4], point[5]);		
+		ROS_INFO("Velocity: %f", velocity);
+        ROS_INFO("Acceleration: %f", acceleration);
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
@@ -47,6 +56,12 @@ namespace ur5::state_publisher {
                                     const std::vector<double> &point2,
                                     const double &velocity,
                                     const double &acceleration) {
+
+        ROS_INFO("Trajectory motion initiated:");		
+		ROS_INFO("Point1: %f %f %f %f %f %f", point1[0], point1[1], point1[2], point1[3], point1[4], point1[5]);	
+        ROS_INFO("Point2: %f %f %f %f %f %f", point2[0], point2[1], point2[2], point2[3], point2[4], point2[5]);			
+		ROS_INFO("Velocity: %f", velocity);
+        ROS_INFO("Acceleration: %f", acceleration);
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();

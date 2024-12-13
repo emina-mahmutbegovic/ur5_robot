@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<launch>
+        <node name="ur5_move_joint_1p" pkg="ur5_state_publisher" type="ur5_move_joint_1p" output="screen" />
+</launch>
