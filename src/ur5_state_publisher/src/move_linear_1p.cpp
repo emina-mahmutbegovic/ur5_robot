@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 	urdf_file_path += "/urdf/ur5.xacro";
 
     // Init ROS
-    ros::init(argc, argv, ur5::ik_solver::kServiceName);
+    ros::init(argc, argv, libs::ik_solver::kServiceName);
 
 	// Parse urdf model and generate KDL tree
 	KDL::Tree ur5_tree;
@@ -44,13 +44,13 @@ int main(int argc, char** argv) {
 
     // Generate a kinematic chain from the robot base to its tcp
 	KDL::Chain ur5_chain;
-	ur5_tree.getChain(ur5::ik_solver::kBaseLink, ur5::ik_solver::kWrist3Link, ur5_chain);
+	ur5_tree.getChain(libs::ik_solver::ur5::kBaseLink, libs::ik_solver::ur5::kWrist3Link, ur5_chain);
 
     // Create Joint Motion Generator instance
-    ur5::ik_solver::JointMotionGenerator joint_motion_generator(ur5_chain);
+    libs::ik_solver::JointMotionGenerator joint_motion_generator(ur5_chain);
 
     // Create Joint State Publisher instance
-    ur5::state_publisher::JointStatePublisher joint_state_publisher{};
+    libs::state_publisher::JointStatePublisher joint_state_publisher{};
 
     ros::NodeHandle node_handle;
 
@@ -62,7 +62,9 @@ int main(int argc, char** argv) {
     // Init publisher
     joint_state_publisher.init(node_handle);
 
-    ros::Subscriber joint_angles_current = node_handle.subscribe(ur5::state_publisher::kControllerStateTopic, 1000, get_current_joint_angles);
+    ros::Subscriber joint_angles_current = node_handle.subscribe(libs::state_publisher::ur5::topic::kControllerStateTopic, 
+                                                                1000, 
+                                                                get_current_joint_angles);
             
     ros::Rate loop_rate(joint_state_publisher.kLoopRate_());
 

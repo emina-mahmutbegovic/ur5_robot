@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ur5_state_publisher)
+project(libs)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,19 +8,21 @@ project(ur5_state_publisher)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  interactive_markers
-  moveit_core
-  moveit_ros_planning_interface
+  kdl_parser
   roscpp
   rospy
-  std_msgs
-  tf
-  sensor_msgs
-  control_msgs
   trajectory_msgs
-  kdl_parser
 )
 
+add_library(libs STATIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/joint_motion_generator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/joint_state_publisher.cpp
+) 
+
+target_include_directories(libs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# install(TARGETS libs
+#         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -78,7 +80,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   trajectory_msgs
 # )
 
 ################################################
@@ -112,8 +114,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES ur5_ik
-#  CATKIN_DEPENDS interactive_markers moveit_core moveit_ros_planning_interface roscpp rospy std_msgs
+#  LIBRARIES ur5_libs
+#  CATKIN_DEPENDS kdl_parser roscpp rospy trajectory_msgs
 #  DEPENDS system_lib
 )
 
@@ -128,21 +130,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(ur5_move_joint_1p src/move_joint_1p.cpp)
-add_dependencies(ur5_move_joint_1p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_joint_1p libs ${catkin_LIBRARIES})
-
-add_executable(ur5_move_joint_2p src/move_joint_2p.cpp)
-add_dependencies(ur5_move_joint_2p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_joint_2p libs ${catkin_LIBRARIES})
-
-add_executable(ur5_move_linear_1p src/move_linear_1p.cpp)
-add_dependencies(ur5_move_linear_1p ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_move_linear_1p libs ${catkin_LIBRARIES})
-
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/ur5_ik.cpp
+#   src/${PROJECT_NAME}/ur5_libs.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -153,7 +143,7 @@ target_link_libraries(ur5_move_linear_1p libs ${catkin_LIBRARIES})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/ur5_ik_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/ur5_libs_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -217,7 +207,7 @@ target_link_libraries(ur5_move_linear_1p libs ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ur5_ik.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_ur5_libs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

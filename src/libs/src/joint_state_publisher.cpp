@@ -7,10 +7,10 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
 
-namespace ur5::state_publisher {
+namespace libs::state_publisher {
 
     void JointStatePublisher::init(ros::NodeHandle &node_handle) {
-        joint_trajectory_pub_ = node_handle.advertise<trajectory_msgs::JointTrajectory>(kControllerCommandTopic, kQueueSize, true);
+        joint_trajectory_pub_ = node_handle.advertise<trajectory_msgs::JointTrajectory>(ur5::topic::kControllerCommandTopic, kQueueSize, true);
     }
 
     void JointStatePublisher::load_trajectory_point(trajectory_msgs::JointTrajectoryPoint *joint_trajectory_point, 
@@ -19,8 +19,8 @@ namespace ur5::state_publisher {
                                 const double &acceleration) {
         joint_trajectory_point->positions = point;
       
-        joint_trajectory_point->velocities.resize(6);
-        joint_trajectory_point->accelerations.resize(6);
+        joint_trajectory_point->velocities.resize(point.size());
+        joint_trajectory_point->accelerations.resize(point.size());
 
         for(auto i = 0; i < point.size(); ++i) {
             joint_trajectory_point->velocities[i] = velocity;
@@ -39,7 +39,13 @@ namespace ur5::state_publisher {
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
-        joint_trajectory.joint_names = {kShoulderPanJoint, kShoulderLiftJoint, kElbowJoint, kWrist1Joint, kWrist2Joint, kWrist3Joint};
+        joint_trajectory.joint_names = {ur5::joint::kShoulderPanJoint, 
+                                        ur5::joint::kShoulderLiftJoint, 
+                                        ur5::joint::kElbowJoint, 
+                                        ur5::joint::kWrist1Joint, 
+                                        ur5::joint::kWrist2Joint, 
+                                        ur5::joint::kWrist3Joint
+        };
 
         trajectory_msgs::JointTrajectoryPoint joint_trajectory_point;
         load_trajectory_point(&joint_trajectory_point, point, velocity, acceleration);
@@ -65,7 +71,13 @@ namespace ur5::state_publisher {
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
-        joint_trajectory.joint_names = {kShoulderPanJoint, kShoulderLiftJoint, kElbowJoint, kWrist1Joint, kWrist2Joint, kWrist3Joint};
+        joint_trajectory.joint_names = {ur5::joint::kShoulderPanJoint, 
+                                        ur5::joint::kShoulderLiftJoint, 
+                                        ur5::joint::kElbowJoint, 
+                                        ur5::joint::kWrist1Joint, 
+                                        ur5::joint::kWrist2Joint, 
+                                        ur5::joint::kWrist3Joint
+        };
 
         trajectory_msgs::JointTrajectoryPoint joint_trajectory_point1;
         load_trajectory_point(&joint_trajectory_point1, point1, velocity, acceleration);
@@ -84,4 +96,4 @@ namespace ur5::state_publisher {
         // Publish trajectory
         joint_trajectory_pub_.publish(joint_trajectory);
     }
-}
+} // namespace libs::state_publisher

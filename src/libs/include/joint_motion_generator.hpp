@@ -15,7 +15,12 @@
 #include <kdl/jntarray.hpp>
 #include <string>
 
-namespace ur5::ik_solver {
+namespace libs::ik_solver {
+
+namespace ur5 {
+    const std::string kBaseLink = "base_link";
+    const std::string kWrist3Link = "wrist_3_link";
+}
 
 class JointMotionGenerator {
 
@@ -51,9 +56,6 @@ void print_tcp_pose(const KDL::Frame &tcp_pose);
 // Define constants
 const std::string kServiceName = "inverse_kinematics_solver";
 
-const std::string kBaseLink = "base_link";
-const std::string kWrist3Link = "wrist_3_link";
-
-} // namespace ur5::ik_solver
+} // namespace libs::ik_solver
 
 #endif // JOINT_MOTION_GENERATOR_HPP

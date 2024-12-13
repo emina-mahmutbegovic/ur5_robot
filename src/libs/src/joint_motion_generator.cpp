@@ -6,7 +6,7 @@
 
 #include <ros/ros.h>
 
-namespace ur5::ik_solver {
+namespace libs::ik_solver {
     
     void JointMotionGenerator::compute_joint_angles(KDL::Vector &pose, 
                                                     KDL::JntArray &input_joint_angles, 
@@ -32,4 +32,4 @@ namespace ur5::ik_solver {
 		ROS_INFO("Orientation: %f %f %f", tcp_pose.M(0,0), tcp_pose.M(1,0), tcp_pose.M(2,0));
     }
 
-} // namespace ur5::ik_solver
+} // namespace libs::ik_solver

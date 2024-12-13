@@ -5,10 +5,10 @@
 
 int main(int argc, char** argv) {
     // Init ROS
-    ros::init(argc, argv, ur5::state_publisher::kServiceName);
+    ros::init(argc, argv, libs::state_publisher::kServiceName);
 
     // Create Joint State Publisher instance
-    ur5::state_publisher::JointStatePublisher joint_state_publisher{};
+    libs::state_publisher::JointStatePublisher joint_state_publisher{};
 
     ros::NodeHandle node_handle;
 

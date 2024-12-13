@@ -10,7 +10,25 @@
 #include <trajectory_msgs/JointTrajectoryPoint.h>
 #include <vector>
 
-namespace ur5::state_publisher {
+namespace libs::state_publisher {
+
+namespace ur5 {
+
+namespace topic {
+    const std::string kControllerCommandTopic = "/ur5/eff_joint_traj_controller/command";
+    const std::string kControllerStateTopic = "/ur5/eff_joint_traj_controller/state";
+}
+
+namespace joint {
+    const std::string kShoulderPanJoint = "shoulder_pan_joint";
+    const std::string kShoulderLiftJoint = "shoulder_lift_joint";
+    const std::string kElbowJoint = "elbow_joint";
+    const std::string kWrist1Joint = "wrist_1_joint";
+    const std::string kWrist2Joint = "wrist_2_joint";
+    const std::string kWrist3Joint = "wrist_3_joint";
+}
+
+}
 
 class JointStatePublisher {
 
@@ -57,16 +75,6 @@ private:
  // TODO: Load constants below from config file
 const std::string kServiceName = "joint_state_publisher";
 
-const std::string kControllerCommandTopic = "/ur5/eff_joint_traj_controller/command";
-const std::string kControllerStateTopic = "/ur5/eff_joint_traj_controller/state";
-
-const std::string kShoulderPanJoint = "shoulder_pan_joint";
-const std::string kShoulderLiftJoint = "shoulder_lift_joint";
-const std::string kElbowJoint = "elbow_joint";
-const std::string kWrist1Joint = "wrist_1_joint";
-const std::string kWrist2Joint = "wrist_2_joint";
-const std::string kWrist3Joint = "wrist_3_joint";
-
-} // namespace ur5::state_publisher
+} // namespace libs::state_publisher
 
 #endif // JOINT_STATE_PUBLISHER_HPP
