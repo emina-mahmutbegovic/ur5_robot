@@ -8,16 +8,9 @@ project(ur5_state_publisher)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  interactive_markers
-  moveit_core
-  moveit_ros_planning_interface
   roscpp
   rospy
-  std_msgs
-  tf
-  sensor_msgs
   control_msgs
-  trajectory_msgs
   kdl_parser
 )
 

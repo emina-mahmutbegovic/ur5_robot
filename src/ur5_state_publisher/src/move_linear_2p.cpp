@@ -96,26 +96,34 @@ int main(int argc, char** argv) {
 		std::cin >> v;
         std::cout << " Acceleration: ";
 		std::cin >> a;
-
-        KDL::Vector desired_output_pose2(x, y, z);
-        KDL::JntArray output_joint_angles2(6);
-        joint_motion_generator.compute_joint_angles(desired_output_pose2, jnt_pos_start, output_joint_angles2);
-
+        
         // Populate output points
         std::vector<double> point1(6);
         for(auto i = 0; i < point1.size(); ++i) {
             point1[i] = output_joint_angles1(i);
         }
 
+        joint_state_publisher.move_1p(point1, v, a);
+
+        sleep(2);
+
+        ROS_INFO("Current joint angles:");		
+		ROS_INFO("Point: %f %f %f %f %f %f \n", jnt_pos_start(0), jnt_pos_start(1), jnt_pos_start(2), jnt_pos_start(3), jnt_pos_start(4), jnt_pos_start(5));		
+        
+        KDL::Vector desired_output_pose2(x, y, z);
+        KDL::JntArray output_joint_angles2(6);
+
+        joint_motion_generator.compute_joint_angles(desired_output_pose2, jnt_pos_start, output_joint_angles2);
+
         std::vector<double> point2(6);
         for(auto i = 0; i < point2.size(); ++i) {
             point2[i] = output_joint_angles2(i);
         }
 
-        joint_state_publisher.move_2p(point1, point2, v, a);
+        joint_state_publisher.move_1p(point2, v, a);
         
         // This will adjust as needed per iteration
-        sleep(3);
+        sleep(2);
     }
 
     ros::shutdown();

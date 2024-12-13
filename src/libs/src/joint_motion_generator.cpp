@@ -18,7 +18,15 @@ namespace libs::ik_solver {
 		ROS_INFO("Current TCP Position/Twist KDL:");		
 		print_tcp_pose(input_tcp_pose);
 
-		KDL::Frame output_tcp_pose(pose);
+        KDL::Vector output_pose(0.0, 0.0, 0.0);
+        for(auto i = 0; i < 3; ++i) {
+            output_pose(i) = input_tcp_pose.p(i) + pose(i);
+            if(output_pose(i) > 1) {
+                output_pose(i) = output_pose(i) - 1;
+            }
+        }
+
+		KDL::Frame output_tcp_pose(input_tcp_pose.M, output_pose);
 
         ROS_INFO("Output TCP Position/Twist KDL:");		
 		print_tcp_pose(output_tcp_pose);
@@ -29,7 +37,7 @@ namespace libs::ik_solver {
 
     void print_tcp_pose(const KDL::Frame &tcp_pose) {
         ROS_INFO("Position: %f %f %f", tcp_pose.p(0), tcp_pose.p(1), tcp_pose.p(2));		
-		ROS_INFO("Orientation: %f %f %f", tcp_pose.M(0,0), tcp_pose.M(1,0), tcp_pose.M(2,0));
+		ROS_INFO("Orientation: %f %f %f \n", tcp_pose.M(0,0), tcp_pose.M(1,0), tcp_pose.M(2,0));
     }
 
 } // namespace libs::ik_solver

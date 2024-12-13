@@ -35,7 +35,7 @@ namespace libs::state_publisher {
 		ROS_INFO("Joint motion initiated:");		
 		ROS_INFO("Point: %f %f %f %f %f %f", point[0], point[1], point[2], point[3], point[4], point[5]);		
 		ROS_INFO("Velocity: %f", velocity);
-        ROS_INFO("Acceleration: %f", acceleration);
+        ROS_INFO("Acceleration: %f \n", acceleration);
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
@@ -67,7 +67,7 @@ namespace libs::state_publisher {
 		ROS_INFO("Point1: %f %f %f %f %f %f", point1[0], point1[1], point1[2], point1[3], point1[4], point1[5]);	
         ROS_INFO("Point2: %f %f %f %f %f %f", point2[0], point2[1], point2[2], point2[3], point2[4], point2[5]);			
 		ROS_INFO("Velocity: %f", velocity);
-        ROS_INFO("Acceleration: %f", acceleration);
+        ROS_INFO("Acceleration: %f \n", acceleration);
 
         trajectory_msgs::JointTrajectory joint_trajectory;
         joint_trajectory.header.stamp = ros::Time::now();
