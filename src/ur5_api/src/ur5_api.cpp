@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
   ur5::server::UR5Server server(node_handle, ur5_chain);
 
   // Subscribe to current states
+  // TODO Move this to server
   ros::Subscriber joint_angles_current = node_handle.subscribe(
       libs::state_publisher::ur5::topic::kControllerStateTopic, 1000,
       ur5::server::get_current_joint_trajectory_ctr_state);

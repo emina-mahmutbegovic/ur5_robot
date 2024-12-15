@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "4b0fbe0c-fd05-4344-9998-47a009efcef1",
+		"name": "UR5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14604849"
+	},
+	"item": [
+		{
+			"name": "transform_robot_state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/transform_robot_state",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"transform_robot_state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "joint_robot_state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/joint_robot_state",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"joint_robot_state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "move_joint",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"point1\": [0, -1.57, 0, -1.57, 0, 0],\n    \"point2\": [0, 0, 0, -1.57, 0, 0],\n    \"velocity\": 0,\n    \"acceleration\": 0.8\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/move_joint",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"move_joint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "move_linear",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pose1\": [0.404, 0.332, 0.713],\n    \"pose2\": [0.693, -0.038, -0.46],\n    \"velocity\": 0,\n    \"acceleration\": 0.8\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/move_linear",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"move_linear"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
