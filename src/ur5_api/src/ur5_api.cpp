@@ -1,6 +1,5 @@
 #include <kdl/chain.hpp>
 #include <kdl_parser/kdl_parser.hpp>
-#include <trajectory_msgs/JointTrajectory.h>
 
 #include "joint_state_publisher.hpp"
 #include "server.hpp"
@@ -33,12 +32,6 @@ int main(int argc, char **argv) {
   ros::NodeHandle node_handle;
 
   ur5::server::UR5Server server(node_handle, ur5_chain);
-
-  // Init publisher
-  joint_trajectory_pub =
-      node_handle.advertise<trajectory_msgs::JointTrajectory>(
-          libs::state_publisher::ur5::topic::kControllerCommandTopic,
-          libs::state_publisher::kQueueSize, true);
 
   // Subscribe to current states
   ros::Subscriber joint_angles_current = node_handle.subscribe(
