@@ -7,93 +7,86 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
 
-namespace libs::state_publisher {
+namespace libs::state_publisher::ur5 {
 
-    void JointStatePublisher::init(ros::NodeHandle &node_handle) {
-        joint_trajectory_pub_ = node_handle.advertise<trajectory_msgs::JointTrajectory>(ur5::topic::kControllerCommandTopic, kQueueSize, true);
-    }
+void load_trajectory_point(
+    trajectory_msgs::JointTrajectoryPoint *joint_trajectory_point,
+    const std::vector<double> &point, const double &velocity,
+    const double &acceleration) {
+  joint_trajectory_point->positions = point;
 
-    void JointStatePublisher::load_trajectory_point(trajectory_msgs::JointTrajectoryPoint *joint_trajectory_point, 
-                                const std::vector<double> &point, 
-                                const double &velocity,
-                                const double &acceleration) {
-        joint_trajectory_point->positions = point;
-      
-        joint_trajectory_point->velocities.resize(point.size());
-        joint_trajectory_point->accelerations.resize(point.size());
+  joint_trajectory_point->velocities.resize(point.size());
+  joint_trajectory_point->accelerations.resize(point.size());
 
-        for(auto i = 0; i < point.size(); ++i) {
-            joint_trajectory_point->velocities[i] = velocity;
-            joint_trajectory_point->accelerations[i] = acceleration;
-        }
-    }
+  for (auto i = 0; i < point.size(); ++i) {
+    joint_trajectory_point->velocities[i] = velocity;
+    joint_trajectory_point->accelerations[i] = acceleration;
+  }
+}
 
-    void JointStatePublisher::move_1p(const std::vector<double> &point, 
-                                      const double &velocity,
-                                      const double &acceleration) {
-        
-		ROS_INFO("Joint motion initiated:");		
-		ROS_INFO("Point: %f %f %f %f %f %f", point[0], point[1], point[2], point[3], point[4], point[5]);		
-		ROS_INFO("Velocity: %f", velocity);
-        ROS_INFO("Acceleration: %f \n", acceleration);
+void move_1p(const std::vector<double> &point, const double &velocity,
+             const double &acceleration, ros::Publisher &joint_trajectory_pub) {
 
-        trajectory_msgs::JointTrajectory joint_trajectory;
-        joint_trajectory.header.stamp = ros::Time::now();
-        joint_trajectory.joint_names = {ur5::joint::kShoulderPanJoint, 
-                                        ur5::joint::kShoulderLiftJoint, 
-                                        ur5::joint::kElbowJoint, 
-                                        ur5::joint::kWrist1Joint, 
-                                        ur5::joint::kWrist2Joint, 
-                                        ur5::joint::kWrist3Joint
-        };
+  ROS_INFO("Joint motion initiated:");
+  ROS_INFO("Point: %f %f %f %f %f %f", point[0], point[1], point[2], point[3],
+           point[4], point[5]);
+  ROS_INFO("Velocity: %f", velocity);
+  ROS_INFO("Acceleration: %f \n", acceleration);
 
-        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point;
-        load_trajectory_point(&joint_trajectory_point, point, velocity, acceleration);
+  trajectory_msgs::JointTrajectory joint_trajectory;
+  joint_trajectory.header.stamp = ros::Time::now();
+  joint_trajectory.joint_names = {
+      ur5::joint::kShoulderPanJoint, ur5::joint::kShoulderLiftJoint,
+      ur5::joint::kElbowJoint,       ur5::joint::kWrist1Joint,
+      ur5::joint::kWrist2Joint,      ur5::joint::kWrist3Joint};
 
-        joint_trajectory_point.time_from_start = ros::Duration(1.0);
+  trajectory_msgs::JointTrajectoryPoint joint_trajectory_point;
+  load_trajectory_point(&joint_trajectory_point, point, velocity, acceleration);
 
-        joint_trajectory.points.push_back(joint_trajectory_point);
+  joint_trajectory_point.time_from_start = ros::Duration(1.0);
 
-        // Publisj trajectory
-        joint_trajectory_pub_.publish(joint_trajectory);
-    }
+  joint_trajectory.points.push_back(joint_trajectory_point);
 
-    void JointStatePublisher::move_2p(const std::vector<double> &point1, 
-                                    const std::vector<double> &point2,
-                                    const double &velocity,
-                                    const double &acceleration) {
+  // Publish trajectory
+  joint_trajectory_pub.publish(joint_trajectory);
+}
 
-        ROS_INFO("Trajectory motion initiated:");		
-		ROS_INFO("Point1: %f %f %f %f %f %f", point1[0], point1[1], point1[2], point1[3], point1[4], point1[5]);	
-        ROS_INFO("Point2: %f %f %f %f %f %f", point2[0], point2[1], point2[2], point2[3], point2[4], point2[5]);			
-		ROS_INFO("Velocity: %f", velocity);
-        ROS_INFO("Acceleration: %f \n", acceleration);
+void move_2p(const std::vector<double> &point1,
+             const std::vector<double> &point2, const double &velocity,
+             const double &acceleration, ros::Publisher &joint_trajectory_pub) {
 
-        trajectory_msgs::JointTrajectory joint_trajectory;
-        joint_trajectory.header.stamp = ros::Time::now();
-        joint_trajectory.joint_names = {ur5::joint::kShoulderPanJoint, 
-                                        ur5::joint::kShoulderLiftJoint, 
-                                        ur5::joint::kElbowJoint, 
-                                        ur5::joint::kWrist1Joint, 
-                                        ur5::joint::kWrist2Joint, 
-                                        ur5::joint::kWrist3Joint
-        };
+  ROS_INFO("Trajectory motion initiated:");
+  ROS_INFO("Point1: %f %f %f %f %f %f", point1[0], point1[1], point1[2],
+           point1[3], point1[4], point1[5]);
+  ROS_INFO("Point2: %f %f %f %f %f %f", point2[0], point2[1], point2[2],
+           point2[3], point2[4], point2[5]);
+  ROS_INFO("Velocity: %f", velocity);
+  ROS_INFO("Acceleration: %f \n", acceleration);
 
-        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point1;
-        load_trajectory_point(&joint_trajectory_point1, point1, velocity, acceleration);
+  trajectory_msgs::JointTrajectory joint_trajectory;
+  joint_trajectory.header.stamp = ros::Time::now();
+  joint_trajectory.joint_names = {
+      ur5::joint::kShoulderPanJoint, ur5::joint::kShoulderLiftJoint,
+      ur5::joint::kElbowJoint,       ur5::joint::kWrist1Joint,
+      ur5::joint::kWrist2Joint,      ur5::joint::kWrist3Joint};
 
-        joint_trajectory_point1.time_from_start = ros::Duration(1.0);
+  trajectory_msgs::JointTrajectoryPoint joint_trajectory_point1;
+  ur5::load_trajectory_point(&joint_trajectory_point1, point1, velocity,
+                             acceleration);
 
-        trajectory_msgs::JointTrajectoryPoint joint_trajectory_point2;
-        load_trajectory_point(&joint_trajectory_point2, point2, velocity, acceleration);
+  joint_trajectory_point1.time_from_start = ros::Duration(1.0);
 
-        joint_trajectory_point2.time_from_start = ros::Duration(2.0);
+  trajectory_msgs::JointTrajectoryPoint joint_trajectory_point2;
+  ur5::load_trajectory_point(&joint_trajectory_point2, point2, velocity,
+                             acceleration);
 
-        joint_trajectory.points.resize(2);
-        joint_trajectory.points[0] = joint_trajectory_point1;
-        joint_trajectory.points[1] = joint_trajectory_point2;
+  joint_trajectory_point2.time_from_start = ros::Duration(2.0);
 
-        // Publish trajectory
-        joint_trajectory_pub_.publish(joint_trajectory);
-    }
-} // namespace libs::state_publisher
+  joint_trajectory.points.resize(2);
+  joint_trajectory.points[0] = joint_trajectory_point1;
+  joint_trajectory.points[1] = joint_trajectory_point2;
+
+  // Publish trajectory
+  joint_trajectory_pub.publish(joint_trajectory);
+}
+} // namespace libs::state_publisher::ur5

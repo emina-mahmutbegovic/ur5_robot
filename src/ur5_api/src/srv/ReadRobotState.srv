@@ -4,5 +4,5 @@
 
 ---
 # Response
-sensor_msgs/JointState joint_state
+control_msgs/JointTrajectoryControllerState joint_state
 tf2_msgs/TFMessage transform
