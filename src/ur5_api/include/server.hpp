@@ -7,9 +7,11 @@
 
 #include "control_msgs/JointTrajectoryControllerState.h"
 #include "ros/ros.h"
+#include <geometry_msgs/PointStamped.h>
 #include <kdl/chain.hpp>
 #include <string>
 #include <trajectory_msgs/JointTrajectory.h>
+#include <vector>
 
 #include "joint_motion_generator.hpp"
 #include "ur5_api/MoveJoint.h"
@@ -47,6 +49,7 @@ private:
   ros::ServiceServer move_joint_service_;
   ros::ServiceServer move_linear_service_;
 
+  // Joint motion generator
   libs::ik_solver::JointMotionGenerator joint_motion_generator_;
 };
 
@@ -62,6 +65,9 @@ void get_current_joint_trajectory_ctr_state(
 
 void set_joint_state_response(
     control_msgs::JointTrajectoryControllerState &state);
+
+void set_transform_state_response(
+    std::vector<geometry_msgs::TransformStamped> &transforms);
 
 const std::string kBaseLink = "base_link";
 const std::string kServiceName = "ur5_server";

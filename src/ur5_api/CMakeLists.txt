@@ -21,9 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_msgs
 )
 
-# System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -130,7 +127,6 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
-  ${Boost_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -144,10 +140,10 @@ include_directories(
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 # Declare a C++ executable
-add_executable(ur5_api_node src/ur5_api.cpp src/server.cpp)
-add_dependencies(ur5_api_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ur5_api_node libs ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-target_include_directories(ur5_api_node PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_executable(ur5_server_node src/ur5_api.cpp src/server.cpp)
+add_dependencies(ur5_server_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur5_server_node libs ${catkin_LIBRARIES})
+target_include_directories(ur5_server_node PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 #############
 ## Install ##
