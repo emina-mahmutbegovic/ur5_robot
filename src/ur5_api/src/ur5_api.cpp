@@ -1,11 +1,13 @@
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
 #include <kdl/chain.hpp>
 #include <kdl_parser/kdl_parser.hpp>
 
 #include "joint_state_publisher.hpp"
 #include "server.hpp"
 #include <ros/package.h>
-
-static ros::Publisher joint_trajectory_pub;
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, ur5::server::kServiceName);

@@ -12,20 +12,21 @@
 #include <ros/package.h>
 #include <ros/ros.h>
 #include <trajectory_msgs/JointTrajectory.h>
+#include <vector>
 
 using namespace libs::state_publisher;
 
 const int joint_num = 6;
-KDL::JntArray jnt_pos_start(joint_num);
+std::vector<double> jnt_pos_start(joint_num);
 
 void get_current_joint_angles(
     const control_msgs::JointTrajectoryControllerState::ConstPtr &ctr_msg) {
-  jnt_pos_start(0) = ctr_msg->actual.positions[0];
-  jnt_pos_start(1) = ctr_msg->actual.positions[1];
-  jnt_pos_start(2) = ctr_msg->actual.positions[2];
-  jnt_pos_start(3) = ctr_msg->actual.positions[3];
-  jnt_pos_start(4) = ctr_msg->actual.positions[4];
-  jnt_pos_start(5) = ctr_msg->actual.positions[5];
+  jnt_pos_start[0] = ctr_msg->actual.positions[0];
+  jnt_pos_start[1] = ctr_msg->actual.positions[1];
+  jnt_pos_start[2] = ctr_msg->actual.positions[2];
+  jnt_pos_start[3] = ctr_msg->actual.positions[3];
+  jnt_pos_start[4] = ctr_msg->actual.positions[4];
+  jnt_pos_start[5] = ctr_msg->actual.positions[5];
 }
 
 int main(int argc, char **argv) {
@@ -87,9 +88,10 @@ int main(int argc, char **argv) {
     std::cin >> z;
 
     KDL::Vector desired_output_pose1(x, y, z);
-    KDL::JntArray output_joint_angles1(6);
-    joint_motion_generator.compute_joint_angles(
-        desired_output_pose1, jnt_pos_start, output_joint_angles1);
+    std::vector<double> point1(6);
+
+    joint_motion_generator.compute_joint_angles(desired_output_pose1,
+                                                jnt_pos_start, point1);
 
     std::cout << "Please define the second pose, velocity, and acceleration in "
                  "which the motion should be completed:\n";
@@ -105,31 +107,11 @@ int main(int argc, char **argv) {
     std::cout << " Acceleration: ";
     std::cin >> a;
 
-    // Populate output points
-    std::vector<double> point1(6);
-    for (auto i = 0; i < point1.size(); ++i) {
-      point1[i] = output_joint_angles1(i);
-    }
-
-    // joint_state_publisher.move_1p(point1, v, a);
-
-    // sleep(2);
-
-    // ROS_INFO("Current joint angles:");
-    // ROS_INFO("Point: %f %f %f %f %f %f \n", jnt_pos_start(0),
-    // jnt_pos_start(1), jnt_pos_start(2), jnt_pos_start(3), jnt_pos_start(4),
-    // jnt_pos_start(5));
-
     KDL::Vector desired_output_pose2(x, y, z);
-    KDL::JntArray output_joint_angles2(6);
-
-    joint_motion_generator.compute_joint_angles(
-        desired_output_pose2, output_joint_angles1, output_joint_angles2);
-
     std::vector<double> point2(6);
-    for (auto i = 0; i < point2.size(); ++i) {
-      point2[i] = output_joint_angles2(i);
-    }
+
+    joint_motion_generator.compute_joint_angles(desired_output_pose2, point1,
+                                                point2);
 
     ur5::move_2p(point1, point2, v, a, joint_trajectory_pub);
 

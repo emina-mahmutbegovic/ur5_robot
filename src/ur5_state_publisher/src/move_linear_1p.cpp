@@ -12,20 +12,21 @@
 #include <ros/package.h>
 #include <ros/ros.h>
 #include <trajectory_msgs/JointTrajectory.h>
+#include <vector>
 
 using namespace libs::state_publisher;
 
 const int joint_num = 6;
-KDL::JntArray jnt_pos_start(joint_num);
+std::vector<double> jnt_pos_start(joint_num);
 
 void get_current_joint_angles(
     const control_msgs::JointTrajectoryControllerState::ConstPtr &ctr_msg) {
-  jnt_pos_start(0) = ctr_msg->actual.positions[0];
-  jnt_pos_start(1) = ctr_msg->actual.positions[1];
-  jnt_pos_start(2) = ctr_msg->actual.positions[2];
-  jnt_pos_start(3) = ctr_msg->actual.positions[3];
-  jnt_pos_start(4) = ctr_msg->actual.positions[4];
-  jnt_pos_start(5) = ctr_msg->actual.positions[5];
+  jnt_pos_start[0] = ctr_msg->actual.positions[0];
+  jnt_pos_start[1] = ctr_msg->actual.positions[1];
+  jnt_pos_start[2] = ctr_msg->actual.positions[2];
+  jnt_pos_start[3] = ctr_msg->actual.positions[3];
+  jnt_pos_start[4] = ctr_msg->actual.positions[4];
+  jnt_pos_start[5] = ctr_msg->actual.positions[5];
 }
 
 int main(int argc, char **argv) {
@@ -74,7 +75,7 @@ int main(int argc, char **argv) {
   ros::Rate loop_rate(kLoopRate);
 
   while (ros::ok()) {
-    KDL::JntArray output_joint_angles(6);
+    std::vector<double> point(6);
 
     // Get user input
     std::cout
@@ -95,15 +96,10 @@ int main(int argc, char **argv) {
 
     KDL::Vector desired_output_pose(x, y, z);
 
-    joint_motion_generator.compute_joint_angles(
-        desired_output_pose, jnt_pos_start, output_joint_angles);
+    joint_motion_generator.compute_joint_angles(desired_output_pose,
+                                                jnt_pos_start, point);
 
-    std::vector<double> positions(6);
-    for (auto i = 0; i < positions.size(); ++i) {
-      positions[i] = output_joint_angles(i);
-    }
-
-    ur5::move_1p(positions, v, a, joint_trajectory_pub);
+    ur5::move_1p(point, v, a, joint_trajectory_pub);
 
     // This will adjust as needed per iteration
     sleep(2);

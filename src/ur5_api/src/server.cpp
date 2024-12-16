@@ -1,6 +1,10 @@
-#include <kdl/jntarray.hpp>
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
 #include <numeric>
 #include <tf/transform_listener.h>
+#include <vector>
 
 #include "joint_state_publisher.hpp"
 #include "server.hpp"
@@ -100,40 +104,28 @@ bool UR5Server::move_linear(ur5_api::MoveLinear::Request &req,
     // Extract desired output pose1
     KDL::Vector desired_output_pose1(req.pose1[0], req.pose1[1], req.pose1[2]);
 
-    // Get current joint angles
-    KDL::JntArray current_joint_angles(6);
-    for (auto i = 0; i < 6; ++i) {
-      current_joint_angles(i) = curr_joint_state.actual.positions[i];
-    }
-
-    // Calculate output joint angles
-    KDL::JntArray output_joint_angles1(6);
-    joint_motion_generator_.compute_joint_angles(
-        desired_output_pose1, current_joint_angles, output_joint_angles1);
-
-    // Populate output points
+    // Calculate output poin1
     std::vector<double> point1(6);
-    for (auto i = 0; i < point1.size(); ++i) {
-      point1[i] = output_joint_angles1(i);
-    }
+    joint_motion_generator_.compute_joint_angles(
+        desired_output_pose1, curr_joint_state.actual.positions, point1);
+
+    // Generate movement
+    libs::state_publisher::ur5::move_1p(point1, req.velocity, req.acceleration,
+                                        joint_trajectory_pub_);
+
+    sleep(1.0);
 
     // Get desired output pose2
     KDL::Vector desired_output_pose2(req.pose2[0], req.pose2[1], req.pose2[2]);
 
-    // Calculate output joint angles
-    KDL::JntArray output_joint_angles2(6);
-    joint_motion_generator_.compute_joint_angles(
-        desired_output_pose2, output_joint_angles1, output_joint_angles2);
-
-    // Populate output points
+    // Calculate output point2
     std::vector<double> point2(6);
-    for (auto i = 0; i < point2.size(); ++i) {
-      point2[i] = output_joint_angles2(i);
-    }
+    joint_motion_generator_.compute_joint_angles(
+        desired_output_pose2, curr_joint_state.actual.positions, point2);
 
     // Generate movement
-    libs::state_publisher::ur5::move_2p(
-        point1, point2, req.velocity, req.acceleration, joint_trajectory_pub_);
+    libs::state_publisher::ur5::move_1p(point2, req.velocity, req.acceleration,
+                                        joint_trajectory_pub_);
 
     // Set response
     set_transform_state_response(res.transform.transforms);

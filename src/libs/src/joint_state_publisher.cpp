@@ -89,4 +89,5 @@ void move_2p(const std::vector<double> &point1,
   // Publish trajectory
   joint_trajectory_pub.publish(joint_trajectory);
 }
+
 } // namespace libs::state_publisher::ur5

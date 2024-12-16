@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<launch>
+        <node name="ur5_server_node" pkg="ur5_api" type="ur5_server_node" output="screen" />
+</launch>

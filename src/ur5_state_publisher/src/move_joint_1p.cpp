@@ -1,3 +1,7 @@
+// Copyright (c) 2024 Emina Mahmutbegovic
+//
+// All rights reserved.
+
 #include "joint_state_publisher.hpp"
 
 #include <ros/ros.h>

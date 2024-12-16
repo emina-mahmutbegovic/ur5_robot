@@ -4,36 +4,46 @@
 
 #include "joint_motion_generator.hpp"
 
+#include <kdl/jntarray.hpp>
 #include <ros/ros.h>
 
 namespace libs::ik_solver {
 
 void JointMotionGenerator::compute_joint_angles(
-    KDL::Vector &pose, KDL::JntArray &input_joint_angles,
-    KDL::JntArray &output_joint_angles) {
+    KDL::Vector &pose, std::vector<double> &input_point,
+    std::vector<double> &output_point) {
+
   // Compute current tcp position
   KDL::Frame input_tcp_pose;
+
+  // Populate input joint angles
+  KDL::JntArray input_joint_angles(input_point.size());
+  for (auto i = 0; i < input_point.size(); ++i) {
+    input_joint_angles(i) = input_point[i];
+  }
+
   fk_solver_.JntToCart(input_joint_angles, input_tcp_pose);
 
   ROS_INFO("Current TCP Position/Twist KDL:");
   print_tcp_pose(input_tcp_pose);
 
-  // KDL::Vector output_pose(0.0, 0.0, 0.0);
-  // for(auto i = 0; i < 3; ++i) {
-  //     output_pose(i) = input_tcp_pose.p(i) + pose(i);
-  //     if(output_pose(i) > 1) {
-  //         output_pose(i) = output_pose(i) - 1;
-  //     }
-  // }
-
   KDL::Frame output_tcp_pose(input_tcp_pose.M, pose);
 
+  // Print for debugging purposes
   ROS_INFO("Output TCP Position/Twist KDL:");
   print_tcp_pose(output_tcp_pose);
+
+  // Variable to store output values
+  KDL::JntArray output_joint_angles(6);
 
   // Compute inverse kinematics
   ik_solver_.CartToJnt(input_joint_angles, output_tcp_pose,
                        output_joint_angles);
+
+  // Populate output points
+  for (auto i = 0; i < output_point.size(); ++i) {
+    output_point[i] = output_joint_angles(i);
+  }
 }
 
 void print_tcp_pose(const KDL::Frame &tcp_pose) {
