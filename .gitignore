@@ -50,3 +50,6 @@ Thumbs.db
 bin/
 lib/
 *.setup_assistant
+
+# Virtual environemnt
+venv/

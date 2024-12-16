@@ -24,8 +24,12 @@ source devel/setup.bash
 ---
 
 # Prerequisites
-- **ROS Noetic:** Ensure your ROS environment is properly set up. [ROS Installation Guideline](http://wiki.ros.org/ROS/Installation)
-- **Python3: [Installation Docs](https://www.python.org/downloads/)**
+- **ROS Noetic/Melodic:** Ensure your ROS environment is properly set up. [ROS Installation Guideline](http://wiki.ros.org/ROS/Installation)
+- **Universal Robots**:
+```bash
+sudo apt install ros-<ros-distro>-universal-robots-description
+```
+- **Python3.8: [Installation Docs](https://www.python.org/downloads/)**
 - **Pip3**: 
 ```bash
 sudo apt-get install python3-pip
@@ -175,6 +179,30 @@ To use this API, you must provide a valid **Google API Key**.
 ---
 
 ### Installation
+#### Note: 
+This application requires **python>=3.9**. To ensure that everything works properly, setup virtual environment first:
+```bash
+cd src/ur5_api_copilot/scripts
+python3 -m venv venv
+source venv/bin/activate
+```
+Install Python3.9:
+```bash
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.9 python3.9-distutils python3.9-venv
+```
+Update the alternatives system:
+```bash
+sudo update-alternatives --config python3
+```
+Select the proper Python version.
+Ensure pip3 is present within the virtual environment. If any problems occur, run:
+```bash
+python3 get-pip.py
+```
 
 #### Step 1: Install Dependencies
 Install Python dependencies from the `requirements.txt` file:
