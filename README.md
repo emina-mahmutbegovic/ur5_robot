@@ -225,10 +225,6 @@ source devel/setup.bash
 #### Step 4: Launch the Application
 Launch the Flask API using ROS:
 ```bash
-roslaunch ur5_api_copilot ur5_api_copilot.launch
-```
-or
-```bash
 rosrun ur5_api_copilot ur5_api_copilot.py
 ```
 ---
