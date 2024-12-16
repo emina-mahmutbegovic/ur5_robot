@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<launch>
+        <node name="ur5_api_copilot" pkg="ur5_api_copilot" type="ur5_api_copilot.py" output="screen" />
+</launch>

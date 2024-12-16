@@ -1,0 +1,4 @@
+flask
+langchain-google-genai
+protobuf
+testresources

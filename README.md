@@ -110,16 +110,101 @@ This repository contains a modular ROS application for simulating and controllin
 
 3. **Run the Client:**
    - In another terminal:
+
+   Install python requirements:
+   ```bash
+   pip3 install -r src/ur5_api/src/scripts/requirements.txt
+   ```
+   Run launch file:
      ```bash
      source devel/setup.bash
      roslaunch ur5_api ur5_client.launch
      ```
+Once the application is running, the Flask API can be accessed at http://localhost:5000.
 
 4. **Send Requests:**
    - Use Postman or any terminal-based HTTP client.
    - A Postman collection is included in this repository for testing.
 
-## 3. **ur5_gazebo**
+## 3. **ur5_api_copilot**
+
+### Overview
+`ur5_api_copilot` is a Catkin package that provides a simple Flask-based API interface utilizing the **GEMINI AI** large language model (LLM) via the **LangChain** library. The application exposes two main endpoints:
+
+### Endpoints
+1. **`/suggest_json`**
+   - **Description**: Takes a ROS `.srv` file as a prompt message and returns a JSON request body suggestion.
+
+2. **`/explain_route`**
+   - **Description**: Takes an API route and returns an explanation of the route.
+
+### Prerequisite
+To use this API, you must provide a valid **Google API Key**.
+- You can generate a free API key via [Google AI Pricing](https://ai.google.dev/pricing#1_5flash).
+
+### Setting the API Key
+1. **Environment Variable**:
+   ```bash
+   export GOOGLE_API_KEY="your-google-api-key"
+   ```
+   
+2. **Prompt Input**:
+   If the environment variable is not set, you will be prompted to enter the API key when running the application.
+
+---
+
+### Installation
+
+#### Step 1: Install Dependencies
+Install Python dependencies from the `requirements.txt` file:
+```bash
+pip3 install -r src/ur5_api_copilot/scripts/requirements.txt
+```
+
+#### Step 2: Build the Catkin Workspace
+Build the workspace using `catkin_make`:
+```bash
+catkin_make
+```
+
+#### Step 3: Source the Workspace
+Source the setup file to ensure ROS can find the package:
+```bash
+source devel/setup.bash
+```
+
+#### Step 4: Launch the Application
+Launch the Flask API using ROS:
+```bash
+roslaunch ur5_api_copilot ur5_api_copilot.launch
+```
+or
+```bash
+rosrun ur5_api_copilot ur5_api_copilot.py
+```
+---
+
+### Usage
+
+Once the application is running, the Flask API can be accessed at `http://localhost:6000`. Use the following endpoints:
+
+#### 1. **`/suggest_json`**
+- **Method**: `POST`
+- **Description**: Takes a ROS `.srv` file as input and returns a JSON request body suggestion.
+- **Example Request**:
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"prompt": "# MoveJoint.srv\nfloat64[] point1\nfloat64[] point2\nfloat64 velocity\nfloat64 acceleration\n---\ncontrol_msgs/JointTrajectoryControllerState joint_state"}' http://localhost:6000/suggest_json
+  ```
+
+#### 2. **`/explain_route`**
+- **Method**: `POST`
+- **Description**: Takes an API route as input and returns an explanation of its purpose.
+- **Example Request**:
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"prompt": "/suggest_json"}' http://localhost:6000/explain_route
+  ```
+
+## 4. **ur5_gazebo**
 Provides Gazebo simulations for the UR5 robot.
 
 ### Launch Files:
@@ -127,7 +212,7 @@ Provides Gazebo simulations for the UR5 robot.
 2. **`ur5_eff_controller.launch`:** Allows external control of the robot (e.g., via `ur5_api`).
 3. **`ur5_rviz.launch`:** Enables interaction of the UR5 robot with the Joint State Publisher GUI.
 
-## 4. **ur5_moveit_config**
+## 5. **ur5_moveit_config**
 - Used in combination with the `spawn_ur5_eff_controller.launch` file for robot interaction.
 - Available robot positions:
   - **up**
@@ -135,7 +220,7 @@ Provides Gazebo simulations for the UR5 robot.
   - **left**
   - **right**
 
-## 5. **ur5_state_publisher**
+## 6. **ur5_state_publisher**
 Provides four test cases for generating joint and linear movements:
 
 ### Test Cases:

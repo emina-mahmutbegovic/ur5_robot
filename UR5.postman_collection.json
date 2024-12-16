@@ -76,7 +76,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"pose1\": [0.404, 0.332, 0.713],\n    \"pose2\": [0.693, -0.038, -0.46],\n    \"velocity\": 0,\n    \"acceleration\": 0.8\n}\n",
+					"raw": "{\n    \"pose1\": [0.404, 0.332, 0.713],\n    \"pose2\": [0.404, 0.332, 0.713],\n    \"velocity\": 0,\n    \"acceleration\": 0.8\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -91,6 +91,60 @@
 					"port": "5000",
 					"path": [
 						"move_linear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "suggest_json",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"prompt\": \"float64[] pose1 float64[] pose2 float64 velocity float64 acceleration --- tf2_msgs/TFMessage transform\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:6000/suggest_json",
+					"host": [
+						"localhost"
+					],
+					"port": "6000",
+					"path": [
+						"suggest_json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "explain_route",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"prompt\": \"/read_joint\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:6000/explain_route",
+					"host": [
+						"localhost"
+					],
+					"port": "6000",
+					"path": [
+						"explain_route"
 					]
 				}
 			},
