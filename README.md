@@ -3,12 +3,33 @@
 This repository contains a modular ROS application for simulating and controlling a UR5 robot in Gazebo. The application is divided into several packages, each with specific functionality.
 
 ---
+# Basic Usage
+1. Clone the repository via
+```bash
+git clone git@github.com:emina-mahmutbegovic/ur5_robot.git
+```
+2. Navigate to the cloned application:
+```bash
+cd ur5_robot
+```
+3. Build the workspace:
+```
+catkin_make
+```
+4. Source the workspace:
+```
+source devel/setup.bash
+```
+
+---
 
 # Prerequisites
-- **ROS Noetic:** Ensure your ROS environment is properly set up.
-- **Python3**
-- **FLASK:** Required for the Python client.
-- **Gazebo:** For visualizing robot movements.
+- **ROS Noetic:** Ensure your ROS environment is properly set up. [ROS Installation Guideline](http://wiki.ros.org/ROS/Installation)
+- **Python3: [Installation Docs](https://www.python.org/downloads/)**
+- **Pip3**: 
+```bash
+sudo apt-get install python3-pip
+```
 
 ---
 
@@ -120,7 +141,7 @@ This repository contains a modular ROS application for simulating and controllin
      source devel/setup.bash
      roslaunch ur5_api ur5_client.launch
      ```
-Once the application is running, the Flask API can be accessed at http://localhost:5000.
+Once the application is running, the Flask API can be accessed at `http://localhost:5000`.
 
 4. **Send Requests:**
    - Use Postman or any terminal-based HTTP client.
